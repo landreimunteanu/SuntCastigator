@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>suntcastigator.ro — În construcție</title>
+  <meta name="description" content="suntcastigator.ro este în construcție. Revenim în curând!" />
+  <style>
+    :root {
+      --bg-1: #0f0c29;
+      --bg-2: #302b63;
+      --bg-3: #24243e;
+      --gold: #ffd45e;
+      --gold-deep: #f5a623;
+      --text: #f4f4f8;
+      --muted: rgba(244, 244, 248, 0.72);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-3));
+      background-size: 400% 400%;
+      animation: gradientShift 18s ease infinite;
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* soft floating glows */
+    body::before,
+    body::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.35;
+      z-index: 0;
+    }
+    body::before {
+      width: 420px; height: 420px;
+      background: var(--gold-deep);
+      top: -120px; left: -100px;
+      animation: float1 14s ease-in-out infinite;
+    }
+    body::after {
+      width: 480px; height: 480px;
+      background: #6b5cff;
+      bottom: -160px; right: -120px;
+      animation: float2 16s ease-in-out infinite;
+    }
+    @keyframes float1 {
+      0%,100% { transform: translate(0,0); }
+      50%     { transform: translate(40px, 30px); }
+    }
+    @keyframes float2 {
+      0%,100% { transform: translate(0,0); }
+      50%     { transform: translate(-40px, -30px); }
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 640px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 56px 40px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(255, 212, 94, 0.4);
+      border-radius: 999px;
+      padding: 7px 16px;
+      margin-bottom: 28px;
+    }
+
+    .trophy {
+      font-size: 3.2rem;
+      line-height: 1;
+      margin-bottom: 18px;
+      display: inline-block;
+      animation: bob 3s ease-in-out infinite;
+      filter: drop-shadow(0 6px 16px rgba(245, 166, 35, 0.5));
+    }
+    @keyframes bob {
+      0%,100% { transform: translateY(0) rotate(-3deg); }
+      50%     { transform: translateY(-10px) rotate(3deg); }
+    }
+
+    h1 {
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+    }
+    h1 .dot { color: var(--gold); }
+
+    .tagline {
+      font-size: clamp(1rem, 2.6vw, 1.2rem);
+      color: var(--muted);
+      margin-bottom: 34px;
+    }
+
+    .names {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 34px;
+    }
+    .name {
+      background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+      color: #2a1c00;
+      font-weight: 700;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 1.05rem;
+      box-shadow: 0 8px 20px rgba(245, 166, 35, 0.35);
+    }
+
+    .footer {
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    .footer strong { color: var(--text); }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <span class="badge">În construcție</span>
+    <div class="trophy">🏆</div>
+    <h1>suntcastigator<span class="dot">.ro</span></h1>
+    <p class="tagline">Lucrăm la ceva grozav. Revenim în curând!</p>
+
+    <div class="names">
+      <span class="name">Lucian</span>
+      <span class="name">Andreea</span>
+      <span class="name">Cristi</span>
+    </div>
+
+    <p class="footer">&copy; <span id="year"></span> <strong>suntcastigator.ro</strong> — Toate drepturile rezervate.</p>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
