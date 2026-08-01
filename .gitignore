@@ -1,2 +1,43 @@
 suntcastigator.code-workspace
 index.html
+
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+.pnpm-store/
+
+# next.js
+.next/
+out/
+build/
+
+# production
+dist/
+
+# env
+.env
+.env*.local
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ide / os
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# testing / coverage
+coverage/
+
+# typescript / next generated
+*.tsbuildinfo
+next-env.d.ts

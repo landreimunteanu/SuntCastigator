@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+/* Base reset for the temporary landing surface. */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial,
+    sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   Landing page ("În construcție")
+   Ported verbatim from the previous static index.html so the visual identity
+   stays pixel-close. Scoped to `.landing` so future marketing pages don't
+   inherit the gradient, glows, or card treatment.
+   -------------------------------------------------------------------------- */
+.landing {
+  --bg-1: #0f0c29;
+  --bg-2: #302b63;
+  --bg-3: #24243e;
+  --gold: #ffd45e;
+  --gold-deep: #f5a623;
+  --text: #f4f4f8;
+  --muted: rgba(244, 244, 248, 0.72);
+
+  color: var(--text);
+  background: linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-3));
+  background-size: 400% 400%;
+  animation: landing-gradient-shift 18s ease infinite;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+@keyframes landing-gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.landing::before,
+.landing::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.35;
+  z-index: 0;
+}
+.landing::before {
+  width: 420px;
+  height: 420px;
+  background: var(--gold-deep);
+  top: -120px;
+  left: -100px;
+  animation: landing-float-1 14s ease-in-out infinite;
+}
+.landing::after {
+  width: 480px;
+  height: 480px;
+  background: #6b5cff;
+  bottom: -160px;
+  right: -120px;
+  animation: landing-float-2 16s ease-in-out infinite;
+}
+@keyframes landing-float-1 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(40px, 30px);
+  }
+}
+@keyframes landing-float-2 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-40px, -30px);
+  }
+}
+
+.landing__card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 640px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 56px 40px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+.landing__badge {
+  display: inline-block;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(255, 212, 94, 0.4);
+  border-radius: 999px;
+  padding: 7px 16px;
+  margin-bottom: 28px;
+}
+
+.landing__trophy {
+  font-size: 3.2rem;
+  line-height: 1;
+  margin-bottom: 18px;
+  display: inline-block;
+  animation: landing-bob 3s ease-in-out infinite;
+  filter: drop-shadow(0 6px 16px rgba(245, 166, 35, 0.5));
+}
+@keyframes landing-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(3deg);
+  }
+}
+
+.landing__title {
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0 0 14px;
+}
+.landing__title-dot {
+  color: var(--gold);
+}
+
+.landing__tagline {
+  font-size: clamp(1rem, 2.6vw, 1.2rem);
+  color: var(--muted);
+  margin: 0 0 34px;
+}
+
+.landing__names {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 34px;
+}
+.landing__name {
+  background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+  color: #2a1c00;
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  box-shadow: 0 8px 20px rgba(245, 166, 35, 0.35);
+}
+
+.landing__footer {
+  font-size: 0.85rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+.landing__footer strong {
+  color: var(--text);
+}
