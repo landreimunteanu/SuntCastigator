@@ -32,15 +32,17 @@ Next.js App Router + TypeScript + Tailwind + shadcn/ui · Supabase (Postgres + R
 
 ## Milestones și ordinea de execuție
 
-| Milestone | Fișier | Poate rula după |
-|---|---|---|
-| M0 Fundație (scaffold, Supabase, Vercel, schemă+RLS, CLAUDE.md) | [tasks/M0-foundation.md](tasks/M0-foundation.md) | — (secvențial) |
-| M1 Auth & tenancy (magic link, protecție rute, roluri) | [tasks/M1-auth.md](tasks/M1-auth.md) | T0.4 |
-| M2 Wizard campanie (shell + 4 pași + listă) | [tasks/M2-wizard.md](tasks/M2-wizard.md) | T1.2 · pașii 1–4 în paralel după shell |
-| M3 Pagina consumator + POST /api/entries (critică) | [tasks/M3-consumer.md](tasks/M3-consumer.md) | T0.4 (paralel cu M2 — campania de test se seedează prin SQL) |
-| M4 Dashboard & rapoarte | [tasks/M4-dashboard.md](tasks/M4-dashboard.md) | T3.2 |
-| M5 Extragere câștigători | [tasks/M5-draw.md](tasks/M5-draw.md) | T4.1 |
-| M6 Hardening, GDPR, UAT, landing real | [tasks/M6-hardening.md](tasks/M6-hardening.md) | M2–M5 (T6.4 oricând) |
+| Milestone | Fișier | Poate rula după | Stare |
+|---|---|---|---|
+| M0 Fundație (scaffold, Supabase, Vercel, schemă+RLS, CLAUDE.md) | [tasks/M0-foundation.md](tasks/M0-foundation.md) | — (secvențial) | ✅ complet |
+| M1 Auth & tenancy (magic link, protecție rute, roluri) | [tasks/M1-auth.md](tasks/M1-auth.md) | T0.4 | ⏳ în lucru |
+| M2 Wizard campanie (shell + 4 pași + listă) | [tasks/M2-wizard.md](tasks/M2-wizard.md) | T1.2 · pașii 1–4 în paralel după shell | — |
+| M3 Pagina consumator + POST /api/entries (critică) | [tasks/M3-consumer.md](tasks/M3-consumer.md) | T0.4 (paralel cu M2 — campania de test se seedează prin SQL) | — |
+| M4 Dashboard & rapoarte | [tasks/M4-dashboard.md](tasks/M4-dashboard.md) | T3.2 | — |
+| M5 Extragere câștigători | [tasks/M5-draw.md](tasks/M5-draw.md) | T4.1 | — |
+| M6 Hardening, GDPR, UAT, landing real | [tasks/M6-hardening.md](tasks/M6-hardening.md) | M2–M5 (T6.4 oricând) | — |
+
+**M0 livrat (2026-08-01):** Next.js 15 + Tailwind v4 + shadcn/ui scaffold cu landing „În construcție" portat din `index.html`; clienți Supabase server/browser + `GET /api/health`; runbook Vercel + DNS cutover ([DEPLOY.md](DEPLOY.md)); migrare schemă v1 aplicată pe proiectul Supabase — 10 tabele, RLS ON peste tot, `is_brand_member()` helper, `submit_entry()` SECURITY DEFINER cu rate-limit per IP/oră + per-contact/24h, seed `settings` (600 lei prag fiscal, 20/h IP).
 
 ~26 taskuri a 0,5–2h fiecare. Drumul critic: T0.1→T0.2→T0.4→T1.1→T1.2→T2.0→T2.4 și T0.4→T3.1→T3.2.
 

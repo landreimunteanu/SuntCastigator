@@ -22,7 +22,10 @@ Single Next.js (App Router, TypeScript) app on Vercel + Supabase (Postgres/RLS, 
 
 `code_entries` has **no anon RLS policies**. The consumer page posts to `POST /api/entries` (route handler), which calls the `submit_entry` RPC with the **service-role** client. Rationale: validation (regex, duplicate, rate limit) must be server-authoritative and atomic; an anon-key INSERT policy would let bots bypass the checks entirely. The service key never leaves the server (CONVENTIONS.md).
 
-## Schema (DDL sketch — finalized in T0.4)
+## Schema (implemented — see `supabase/migrations/0001_init.sql`)
+
+The DDL below is the design sketch that seeded T0.4. The **applied** schema (with indexes, check constraints, RLS policies, `is_brand_member()`, and `submit_entry()`) lives in `supabase/migrations/0001_init.sql`; `supabase/seed.sql` seeds `settings`. If the two diverge, the migration wins — update this section, not the SQL.
+
 
 ```sql
 create table brands (

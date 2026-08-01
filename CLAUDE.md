@@ -54,20 +54,27 @@ Core objects: `brands`, `campaigns` (a contest), `products` (eligible SKUs), `co
 /docs/plan            # roadmap, architecture, hosting, task cards
 ```
 
-## Data model (keep in sync with supabase/migrations)
+## Data model (source of truth: `supabase/migrations/0001_init.sql`)
 
-- **brands** — id, name, slug, logo_url
-- **brand_users** — brand_id, user_id (→ auth), role owner/editor
-- **products** — id, brand_id, sku, name (CSV-uploaded)
-- **campaigns** — id, brand_id, name, slug, status draft/active/ended, starts_at, ends_at, code_length, code_charset, code_regex, single_use_codes, block_invalid_format, limit_per_contact_24h, rules_pdf_path
-- **campaign_products** — m2m
-- **prize_tiers** — campaign_id, name, quantity (null = unlimited), value_lei, kind instant/draw, taxable (>600 lei rule, threshold+rate in settings)
-- **code_entries** — campaign_id, code, full_name, contact, ip, status valid/duplicate/invalid, gdpr_consent_at
-- **draws** — campaign_id, prize_tier_id, seed, participant_count, participants_hash, ran_by, ran_at (auditable, reproducible)
-- **winners** — draw_id, entry_id, position
-- **settings** — key/value jsonb (tax threshold/rate, rate limits)
+Applied in T0.4. Columns listed as `(name, name, …)`; timestamps and `created_at` omitted for brevity.
 
-Full DDL and the requirement→mechanism map: `docs/plan/ARCHITECTURE.md`.
+- **brands** — `id, name, slug, logo_url, created_at`
+- **brand_users** — `brand_id, user_id → auth.users, role ∈ {owner,editor}, created_at` (PK `brand_id + user_id`)
+- **products** — `id, brand_id, sku, name` (unique on `brand_id + sku`)
+- **campaigns** — `id, brand_id, name, slug, status ∈ {draft,active,ended}, starts_at, ends_at, code_length (6..14), code_charset ∈ {letters,digits,alphanumeric}, code_regex, single_use_codes, block_invalid_format, limit_per_contact_24h, rules_pdf_path, hero_image_url, how_to_text, created_by, created_at`
+- **campaign_products** — `campaign_id, product_id` (m2m PK)
+- **prize_tiers** — `id, campaign_id, name, quantity (null = unlimited), value_lei, kind ∈ {instant,draw}, taxable, sort_order` (>600 lei threshold + rate live in `settings`)
+- **code_entries** — `id, campaign_id, code, full_name, contact, ip, status ∈ {valid,duplicate,invalid}, gdpr_consent_at, created_at` (unique valid-code per campaign; indexed by ip+time and contact+time)
+- **draws** — `id, campaign_id, prize_tier_id, seed, participant_count, participants_hash, ran_by, ran_at` (auditable, reproducible)
+- **winners** — `draw_id, entry_id, position` (PK `draw_id + position`; also unique `draw_id + entry_id`)
+- **settings** — `key, value jsonb` (seeded: `prize_tax_threshold_lei={value:600}`, `prize_tax_rate={value:0.10}`, `entry_rate_limit_per_ip_hour={limit:20}`)
+
+**Access rules** (RLS ON everywhere):
+- Brand tables (`brands`, `brand_users`, `products`, `campaigns`, `campaign_products`, `prize_tiers`): `authenticated` members of the brand only, via helper `is_brand_member(brand_id)`.
+- `code_entries` / `draws` / `winners`: members SELECT only; INSERT is server-side (service-role) — for `code_entries` exclusively through `submit_entry(...)`.
+- `settings`: no policies; readable/writable only by service-role.
+
+Requirement→mechanism map: `docs/plan/ARCHITECTURE.md`.
 
 ## Environment variables (names only — real values in .env.local)
 
