@@ -24,25 +24,35 @@ export default async function LoginPage({
   const errorMessage = error ? ERROR_MESSAGES[error] : null;
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md items-center px-4 py-12">
-      <div className="w-full">
-        <h1 className="text-2xl font-semibold text-neutral-900">Conectare</h1>
-        <p className="mt-2 text-sm text-neutral-600">
-          Îți trimitem un link de conectare pe email.
-        </p>
-        {errorMessage && (
-          <div
-            role="alert"
-            className="mt-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800"
-          >
-            {errorMessage}
+    <main className="flex min-h-screen items-center justify-center bg-neutral-50 px-4 py-12">
+      <div className="w-full max-w-sm">
+        <div className="mb-6 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-900 text-xl">
+            🏆
           </div>
-        )}
-        <div className="mt-6">
+          <h1 className="mt-4 text-2xl font-semibold tracking-tight text-neutral-900">
+            Conectare
+          </h1>
+          <p className="mt-2 text-sm text-neutral-600">
+            Îți trimitem un link de conectare pe email.
+          </p>
+        </div>
+
+        <div className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
+          {errorMessage && (
+            <div
+              role="alert"
+              className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800"
+            >
+              {errorMessage}
+            </div>
+          )}
           <LoginForm />
         </div>
-        <p className="mt-6 text-xs text-neutral-500">
-          Nu ai cont încă? Contul se creează pe invitație — contactează operatorul brandului tău.
+
+        <p className="mt-6 text-center text-xs text-neutral-500">
+          Nu ai cont încă? Contul se creează pe invitație — contactează
+          operatorul brandului tău.
         </p>
       </div>
     </main>
