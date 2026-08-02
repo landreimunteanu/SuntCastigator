@@ -24,7 +24,7 @@ export default async function LoginPage({
   const errorMessage = error ? ERROR_MESSAGES[error] : null;
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-neutral-50 px-4 py-12">
+    <main className="app-canvas flex min-h-screen items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
         <div className="mb-6 text-center">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-900 text-xl">

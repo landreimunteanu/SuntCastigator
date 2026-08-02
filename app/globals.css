@@ -13,6 +13,26 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+   App canvas — shared background for dashboard/wizard/auth surfaces.
+   Neutral dot-grid (matches the blueprint's light-gray-canvas +
+   white-card pattern) with a barely-there echo of the landing page's
+   gold accent (#f5a623) in one corner. Layered as background-images on
+   the element itself, not a pseudo-element, so it never fights with
+   content stacking/z-index.
+   -------------------------------------------------------------------------- */
+.app-canvas {
+  background-color: #fafafa;
+  background-image: radial-gradient(
+      circle at 88% 0%,
+      rgba(245, 166, 35, 0.08),
+      transparent 45%
+    ),
+    radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.055) 1px, transparent 0);
+  background-size: 100% 100%, 22px 22px;
+  background-repeat: no-repeat, repeat;
+}
+
+/* --------------------------------------------------------------------------
    Landing page ("În construcție")
    Ported verbatim from the previous static index.html so the visual identity
    stays pixel-close. Scoped to `.landing` so future marketing pages don't

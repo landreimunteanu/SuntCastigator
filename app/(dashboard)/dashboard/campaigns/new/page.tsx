@@ -61,7 +61,7 @@ function NewCampaignForm() {
 
   if (isResuming) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
+      <div className="app-canvas flex min-h-screen items-center justify-center">
         <p className="text-sm text-neutral-600">Se încarcă ciorna...</p>
       </div>
     );
@@ -69,7 +69,7 @@ function NewCampaignForm() {
 
   // Show initial form to enter campaign name
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="app-canvas min-h-screen">
       <div className="mx-auto max-w-2xl px-4 py-8">
         <div className="mb-8">
           <h1 className="text-2xl font-semibold text-neutral-900">
@@ -128,7 +128,7 @@ export default function NewCampaignPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-neutral-50">
+        <div className="app-canvas flex min-h-screen items-center justify-center">
           <p className="text-sm text-neutral-600">Se încarcă...</p>
         </div>
       }

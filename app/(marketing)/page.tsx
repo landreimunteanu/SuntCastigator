@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function LandingPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-neutral-50 px-4">
+    <main className="app-canvas flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-sm text-center">
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-900 text-xl">
           🏆

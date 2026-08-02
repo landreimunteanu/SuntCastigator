@@ -53,7 +53,7 @@ export function WizardStepper({ campaign }: WizardStepperProps) {
 
   if (launchedSlug) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-neutral-50 px-4">
+      <div className="app-canvas flex min-h-screen items-center justify-center px-4">
         <div className="w-full max-w-md rounded-lg border border-emerald-200 bg-white p-8 text-center shadow-sm">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-2xl">
             ✓
@@ -96,7 +96,7 @@ export function WizardStepper({ campaign }: WizardStepperProps) {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="app-canvas min-h-screen">
       <div className="mx-auto max-w-2xl px-4 py-8">
         {/* Header */}
         <div className="mb-8">

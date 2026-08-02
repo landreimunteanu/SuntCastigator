@@ -86,7 +86,7 @@ export default async function DashboardLayout({
             </button>
           </form>
         </header>
-        <main className="flex-1 p-6">{children}</main>
+        <main className="app-canvas flex-1 p-6">{children}</main>
       </div>
     </div>
   );
