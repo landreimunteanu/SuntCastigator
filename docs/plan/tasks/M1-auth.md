@@ -11,6 +11,8 @@
 **Spec:** `/login` with a single email field (zod-validated, Romanian copy: „Îți trimitem un link de conectare pe email"). `signInWithOtp` → email magic link → `/auth/callback` exchanges the code and redirects to `/dashboard`. Include sign-out (server action) exposed in the dashboard layout later.
 **Acceptance:** full round-trip works against the dev Supabase project (use Supabase local email capture or a test inbox); wrong email format shows inline error; already-authenticated visit to `/login` redirects to `/dashboard`.
 
+**Verified end-to-end (2026-08-03)** on `test.suntcastigator.ro`, full round-trip to `/dashboard`. Needed two pieces of Supabase Auth project config that weren't documented anywhere — both now in `DEPLOY.md` → Troubleshooting: custom SMTP (default emailer caps at 2 emails/h) and the `Redirect URLs` allowlist (missing entries silently fall back to Site URL root instead of `/auth/callback`, stranding the PKCE code). Neither is a code bug — no app changes were needed.
+
 ## T1.2 [sonnet] Dashboard shell + route protection + brand context
 
 **Depends:** T1.1

@@ -4,6 +4,8 @@
 
 `suntcastigator.ro` e servit de **GitHub Pages** (repo-ul acesta: `index.html` + `CNAME`). GitHub Pages e exclusiv static: fără cod pe server, fără bază de date, fără secrete. Perfect pentru pagina „În construcție", **imposibil pentru platformă** (auth, Postgres, upload PDF, endpoint public de înscrieri).
 
+**Subdomeniu de testare (deja live):** `test.suntcastigator.ro` → Vercel, pointează la aplicația Next.js reală (auth, dashboard). Există separat de apex ca să nu deranjeze placeholder-ul de pe GitHub Pages înainte de cutover. Config Supabase Auth necesar (SMTP + Redirect URLs) e documentat în [DEPLOY.md](DEPLOY.md#troubleshooting).
+
 ## Recomandare: Vercel + Supabase
 
 | | De ce |

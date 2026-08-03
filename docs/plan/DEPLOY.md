@@ -255,6 +255,28 @@ După ce site-ul funcționează bine pe Vercel o săptămână:
 
 ## Troubleshooting
 
+### Magic link: "Nu am putut trimite linkul. Încearcă din nou."
+
+**Cauză:** Supabase Auth cu emailer-ul built-in are un rate limit implicit de **2 emailuri/oră per proiect** (Authentication → Rate Limits → "Rate limit for sending emails"). Câmpul e needitabil pe emailer-ul default — orice test repetat în aceeași oră îl lovește.
+
+**Fix (definitiv, necesar oricum înainte de brand-uri reale):** configurează SMTP custom.
+1. Cont pe [resend.com](https://resend.com) → **Domains** → **Add Domain** → `suntcastigator.ro` → adaugă recordurile SPF/DKIM afișate la registrarul .ro → așteaptă verificare.
+2. **API Keys** → **Create API Key**.
+3. Supabase → **Authentication** → **Settings** → **SMTP Settings** → Enable Custom SMTP:
+   - Sender email: `no-reply@suntcastigator.ro`
+   - Host: `smtp.resend.com` · Port: `465` · Username: `resend` · Password: API key-ul de la pasul 2
+4. Salvează — rate limit-ul de 2/h dispare (devine editabil / mult mai permisiv).
+
+### Magic link duce pe `/` cu `?code=...` în loc de `/dashboard`
+
+**Cauză:** codul PKCE ajunge pe pagina greșită pentru că URL-ul din `emailRedirectTo` (originea de unde s-a cerut linkul) nu e în allowlist-ul Supabase — Supabase cade pe **Site URL** (rădăcină), nu pe `/auth/callback`, iar codul rămâne neconsumat pe pagina de marketing.
+
+**Fix:** Supabase → **Authentication** → **URL Configuration** → **Redirect URLs** → adaugă explicit fiecare origine folosită pentru testare, de exemplu:
+- `http://localhost:3000/auth/callback`
+- `https://test.suntcastigator.ro/**`
+
+Fără o intrare care acoperă exact `.../auth/callback`, exchange-ul PKCE nu rulează niciodată. După fix, cere un link **nou** (cel vechi e ars) și dă click pe el prompt — codurile PKCE expiră rapid.
+
 ### Deployment eșueaza cu eroare "Cannot find module"
 
 **Cauze posibile:**
