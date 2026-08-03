@@ -2,7 +2,7 @@
 
 > Sursă: `claude md files/BackBoneNotion/SuntCastigator.pdf` (blueprint produs, Notion export).
 > Reguli de lucru: `claude md files/AI-CODING-PLAYBOOK.md` + `claude md files/CONVENTIONS.md` + `CLAUDE.md` (root).
-> Arhitectură și schemă DB: [ARCHITECTURE.md](ARCHITECTURE.md). Hosting: [HOSTING.md](HOSTING.md).
+> Arhitectură și schemă DB: [ARCHITECTURE.md](ARCHITECTURE.md). Hosting: [HOSTING.md](HOSTING.md). Setup local (`.env.local`): [SETUP.md](SETUP.md).
 
 ## Ce construim (rezumat)
 
