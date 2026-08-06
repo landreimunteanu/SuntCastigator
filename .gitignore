@@ -38,6 +38,10 @@ Thumbs.db
 # testing / coverage
 coverage/
 
+# claude code session state / scratch scripts
+.claude/
+.scratch/
+
 # typescript / next generated
 *.tsbuildinfo
 next-env.d.ts
