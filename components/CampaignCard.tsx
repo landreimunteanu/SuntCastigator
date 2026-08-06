@@ -64,13 +64,21 @@ export function CampaignCard({ campaign }: { campaign: CampaignListItem }) {
           </Link>
         )}
         {campaign.status === "active" && (
-          <Link
-            href={`/c/${campaign.slug}`}
-            target="_blank"
-            className="inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-800 shadow-sm transition-colors hover:bg-neutral-50"
-          >
-            Vezi pagina publică
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/dashboard/campaigns/${campaign.id}`}
+              className="inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-800 shadow-sm transition-colors hover:bg-neutral-50"
+            >
+              Vezi detalii
+            </Link>
+            <Link
+              href={`/c/${campaign.slug}`}
+              target="_blank"
+              className="inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-800 shadow-sm transition-colors hover:bg-neutral-50"
+            >
+              Vezi pagina publică
+            </Link>
+          </div>
         )}
         {campaign.status === "ended" && (
           <Link
