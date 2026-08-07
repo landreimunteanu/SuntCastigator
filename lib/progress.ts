@@ -85,9 +85,9 @@ export const PROGRESS_MILESTONES: ProgressMilestone[] = [
     title: "Hardening, legal, lansare",
     tasks: [
       { id: "T6.1", title: "Revizuire de securitate + remedieri (cross-tenant, headere, erori)", state: "done" },
-      { id: "T6.2", title: "Pagini GDPR/legale + script de ștergere participant", state: "planned" },
+      { id: "T6.2", title: "Pagini GDPR/legale + script de ștergere participant", state: "done" },
       { id: "T6.3", title: "UAT — testare completă cu un brand real", state: "planned" },
-      { id: "T6.4", title: "Pagină de landing de marketing reală", state: "planned" },
+      { id: "T6.4", title: "Pagină de landing de marketing reală", state: "done" },
     ],
   },
 ];
@@ -99,4 +99,5 @@ export const CURRENT_FUNCTIONALITY: string[] = [
   "Dashboard cu statistici live, tabel de înscrieri, grafic pe zile și export CSV al participanților eligibili",
   "Motor de extragere a câștigătorilor, reproductibil (seed + hash înregistrate), cu audit, export CSV și listă pregătită pentru notificare manuală",
   "Izolare completă între branduri (RLS pe toate tabelele, verificată prin teste live), fără scurgere de erori interne, headere de securitate de bază",
+  "Pagini legale (Termeni și condiții, Politica de confidențialitate) cu structură pregătită pentru textul juridic, și script operator de ștergere GDPR a datelor unui participant",
 ];

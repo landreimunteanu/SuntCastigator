@@ -33,6 +33,67 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+   Marketing landing (product page)
+   Reuses the landing's visual identity (animated deep-purple gradient + gold
+   glows) but as a scrollable multi-section shell rather than a single centered
+   card. Colors/animation kept in sync with `.landing` below. Content sections
+   are composed with Tailwind utilities on top of this shell.
+   -------------------------------------------------------------------------- */
+.marketing {
+  --gold: #ffd45e;
+  --gold-deep: #f5a623;
+  color: #f4f4f8;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  background-size: 400% 400%;
+  animation: landing-gradient-shift 18s ease infinite;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+.marketing::before {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.3;
+  z-index: 0;
+  width: 420px;
+  height: 420px;
+  background: var(--gold-deep);
+  top: -140px;
+  left: -120px;
+  animation: landing-float-1 14s ease-in-out infinite;
+}
+.marketing::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.3;
+  z-index: 0;
+  width: 480px;
+  height: 480px;
+  background: #6b5cff;
+  top: 40%;
+  right: -160px;
+  animation: landing-float-2 16s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marketing,
+  .marketing::before,
+  .marketing::after {
+    animation: none;
+  }
+}
+.marketing__gold {
+  color: var(--gold);
+}
+.marketing__pill {
+  background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+  color: #2a1c00;
+}
+
+/* --------------------------------------------------------------------------
    Landing page ("În construcție")
    Ported verbatim from the previous static index.html so the visual identity
    stays pixel-close. Scoped to `.landing` so future marketing pages don't
