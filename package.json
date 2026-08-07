@@ -8,7 +8,8 @@
     "start": "next start",
     "seed:brand": "node scripts/seed-brand.mjs",
     "test:roles": "node --test lib/auth/roles.test.mjs",
-    "test:code-format": "node --test lib/code-format.test.mjs"
+    "test:code-format": "node --test lib/code-format.test.mjs",
+    "test:draw-engine": "node --test lib/draw/engine.test.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",

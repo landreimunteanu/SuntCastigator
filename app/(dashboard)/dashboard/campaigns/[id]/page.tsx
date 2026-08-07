@@ -135,12 +135,18 @@ export default async function CampaignOverviewPage({
         <EntriesChart data={dayCounts} />
       </div>
 
-      <div className="mt-6">
+      <div className="mt-6 flex items-center gap-3">
         <Link
           href={`/dashboard/campaigns/${campaign.id}/entries`}
           className="inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-800 shadow-sm transition-colors hover:bg-neutral-50"
         >
           Vezi toate înscrierile →
+        </Link>
+        <Link
+          href={`/dashboard/campaigns/${campaign.id}/draw`}
+          className="inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-800 shadow-sm transition-colors hover:bg-neutral-50"
+        >
+          🎲 Extragere câștigători
         </Link>
       </div>
     </div>
