@@ -86,7 +86,7 @@ export const PROGRESS_MILESTONES: ProgressMilestone[] = [
     tasks: [
       { id: "T6.1", title: "Revizuire de securitate + remedieri (cross-tenant, headere, erori)", state: "done" },
       { id: "T6.2", title: "Pagini GDPR/legale + script de ștergere participant", state: "done" },
-      { id: "T6.3", title: "UAT — testare completă cu un brand real", state: "planned" },
+      { id: "T6.3", title: "UAT — testare completă cu un brand real (checklist pregătit, rulare manuală în așteptare)", state: "in_progress" },
       { id: "T6.4", title: "Pagină de landing de marketing reală", state: "done" },
     ],
   },
