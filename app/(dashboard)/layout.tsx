@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { href: "/dashboard/draw",      label: "Extragere" },
   { href: "/dashboard/reports",   label: "Rapoarte" },
   { href: "/dashboard/settings",  label: "Setări" },
+  { href: "/dashboard/platform",  label: "Progress Platformă" },
 ];
 
 export default async function DashboardLayout({

@@ -35,6 +35,7 @@ Core objects: `brands`, `campaigns` (a contest), `products` (eligible SKUs), `co
 7. **Never generate legal text** (regulament, T&C) — placeholders only; a human provides the wording.
 8. Ambiguous request → **ask one clarifying question**, don't guess big.
 9. Tasks marked **[STRONG]** in the task cards (schema/RLS, `/api/entries`, draw engine, security review) are not for weaker agents.
+10. **Keep the progress page current.** `/dashboard/platform` renders `lib/progress.ts` (milestone/task status + "what works now"). Any commit that finishes a task-card item, ships user-facing functionality, or fixes a notable bug/security issue must update `lib/progress.ts` in that same commit.
 
 ## Folder structure
 
