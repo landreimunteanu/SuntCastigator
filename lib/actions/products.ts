@@ -5,6 +5,24 @@ import { getCurrentBrand } from "@/lib/supabase/get-brand";
 import { productRowSchema } from "@/lib/validations/product";
 import { parseProductsCsv, type CsvParseError } from "@/lib/csv/parse";
 
+async function assertCampaignOwnership(campaignId: string) {
+  const brand = await getCurrentBrand();
+  if (!brand) throw new Error("No brand context");
+
+  const supabase = await createClient();
+  const { data: campaign } = await supabase
+    .from("campaigns")
+    .select("id, brand_id")
+    .eq("id", campaignId)
+    .single();
+
+  if (!campaign || campaign.brand_id !== brand.brand.id) {
+    throw new Error("Unauthorized");
+  }
+
+  return { supabase, brandId: brand.brand.id };
+}
+
 export async function importProductsCsv(csvContent: string) {
   const brand = await getCurrentBrand();
   if (!brand) throw new Error("No brand context");
@@ -44,10 +62,18 @@ export async function importProductsCsv(csvContent: string) {
     .select("id");
 
   if (error) {
-    throw new Error(`Failed to import products: ${error.message}`);
+    console.error("importProductsCsv failed:", error);
+    throw new Error("Nu am putut importa produsele.");
   }
 
   return { imported: data?.length ?? 0, errors };
+}
+
+// PostgREST's .or() filter DSL treats `,`, `(`, `)`, and `.` as syntax —
+// strip them from user input so a search term can't break out of the
+// intended name/sku filter or trigger a parser error.
+function escapePostgrestFilterValue(value: string) {
+  return value.replace(/[,().]/g, "");
 }
 
 export async function searchProducts(query: string) {
@@ -61,27 +87,32 @@ export async function searchProducts(query: string) {
     .eq("brand_id", brand.brand.id)
     .order("name", { ascending: true });
 
-  if (query.trim()) {
-    request = request.or(`name.ilike.%${query}%,sku.ilike.%${query}%`);
+  const safeQuery = escapePostgrestFilterValue(query.trim());
+  if (safeQuery) {
+    request = request.or(`name.ilike.%${safeQuery}%,sku.ilike.%${safeQuery}%`);
   }
 
   const { data, error } = await request;
-  if (error) throw new Error(`Failed to search products: ${error.message}`);
+  if (error) {
+    console.error("searchProducts failed:", error);
+    throw new Error("Nu am putut căuta produsele.");
+  }
 
   return data ?? [];
 }
 
 export async function getSelectedProductIds(campaignId: string) {
-  const brand = await getCurrentBrand();
-  if (!brand) throw new Error("No brand context");
+  const { supabase } = await assertCampaignOwnership(campaignId);
 
-  const supabase = await createClient();
   const { data, error } = await supabase
     .from("campaign_products")
     .select("product_id")
     .eq("campaign_id", campaignId);
 
-  if (error) throw new Error(`Failed to load selection: ${error.message}`);
+  if (error) {
+    console.error("getSelectedProductIds failed:", error);
+    throw new Error("Nu am putut încărca selecția de produse.");
+  }
 
   return (data ?? []).map((row) => row.product_id as string);
 }
@@ -91,26 +122,44 @@ export async function toggleCampaignProduct(
   productId: string,
   selected: boolean
 ) {
-  const brand = await getCurrentBrand();
-  if (!brand) throw new Error("No brand context");
-
-  const supabase = await createClient();
+  const { supabase, brandId } = await assertCampaignOwnership(campaignId);
 
   if (selected) {
+    // Defense in depth: the campaign_products_insert RLS policy already
+    // enforces this at the DB level, but check here too so a foreign
+    // product id fails fast with a clear reason instead of a raw
+    // Postgres RLS-violation error reaching the client.
+    const { data: product } = await supabase
+      .from("products")
+      .select("id")
+      .eq("id", productId)
+      .eq("brand_id", brandId)
+      .maybeSingle();
+
+    if (!product) {
+      throw new Error("Produs invalid.");
+    }
+
     const { error } = await supabase
       .from("campaign_products")
       .upsert(
         { campaign_id: campaignId, product_id: productId },
         { onConflict: "campaign_id,product_id" }
       );
-    if (error) throw new Error(`Failed to select product: ${error.message}`);
+    if (error) {
+      console.error("toggleCampaignProduct (select) failed:", error);
+      throw new Error("Nu am putut selecta produsul.");
+    }
   } else {
     const { error } = await supabase
       .from("campaign_products")
       .delete()
       .eq("campaign_id", campaignId)
       .eq("product_id", productId);
-    if (error) throw new Error(`Failed to deselect product: ${error.message}`);
+    if (error) {
+      console.error("toggleCampaignProduct (deselect) failed:", error);
+      throw new Error("Nu am putut anula selecția produsului.");
+    }
   }
 
   return { ok: true };

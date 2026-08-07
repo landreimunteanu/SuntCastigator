@@ -32,7 +32,10 @@ export async function listPrizeTiers(campaignId: string) {
     .eq("campaign_id", campaignId)
     .order("sort_order", { ascending: true });
 
-  if (error) throw new Error(`Failed to load prize tiers: ${error.message}`);
+  if (error) {
+    console.error("listPrizeTiers failed:", error);
+    throw new Error("Nu am putut încărca premiile.");
+  }
 
   return data ?? [];
 }
@@ -64,7 +67,10 @@ export async function createPrizeTier(
     .select("id, name, quantity, value_lei, kind, taxable, sort_order")
     .single();
 
-  if (error) throw new Error(`Failed to create prize tier: ${error.message}`);
+  if (error) {
+    console.error("createPrizeTier failed:", error);
+    throw new Error("Nu am putut crea premiul.");
+  }
 
   return { tier: data, tax };
 }
@@ -92,7 +98,10 @@ export async function updatePrizeTier(
     .select("id, name, quantity, value_lei, kind, taxable, sort_order")
     .single();
 
-  if (error) throw new Error(`Failed to update prize tier: ${error.message}`);
+  if (error) {
+    console.error("updatePrizeTier failed:", error);
+    throw new Error("Nu am putut actualiza premiul.");
+  }
 
   return { tier: data, tax };
 }
@@ -106,7 +115,10 @@ export async function deletePrizeTier(tierId: string, campaignId: string) {
     .eq("id", tierId)
     .eq("campaign_id", campaignId);
 
-  if (error) throw new Error(`Failed to delete prize tier: ${error.message}`);
+  if (error) {
+    console.error("deletePrizeTier failed:", error);
+    throw new Error("Nu am putut șterge premiul.");
+  }
 
   return { ok: true };
 }

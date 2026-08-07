@@ -70,7 +70,8 @@ export async function launchCampaign(
     .eq("id", campaignId);
 
   if (updateError) {
-    throw new Error(`Failed to launch campaign: ${updateError.message}`);
+    console.error("launchCampaign failed:", updateError);
+    throw new Error("Nu am putut lansa campania.");
   }
 
   return { ok: true, errors: [], slug: campaign.slug };

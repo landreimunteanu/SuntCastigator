@@ -45,7 +45,8 @@ export async function createCampaignDraft(input: CampaignNameInput) {
     .single();
 
   if (error) {
-    throw new Error(`Failed to create campaign: ${error.message}`);
+    console.error("createCampaignDraft failed:", error);
+    throw new Error("Nu am putut crea campania.");
   }
 
   return campaign;
@@ -124,7 +125,8 @@ export async function updateCampaignDraft(
     .single();
 
   if (updateError) {
-    throw new Error(`Failed to update campaign: ${updateError.message}`);
+    console.error("updateCampaignDraft failed:", updateError);
+    throw new Error("Nu am putut actualiza campania.");
   }
 
   return updated;

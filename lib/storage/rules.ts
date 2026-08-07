@@ -39,7 +39,8 @@ export async function uploadRulesPdf(campaignId: string, file: File) {
     .upload(path, file, { contentType: "application/pdf", upsert: true });
 
   if (uploadError) {
-    throw new Error(`Failed to upload PDF: ${uploadError.message}`);
+    console.error("uploadRulesPdf (storage) failed:", uploadError);
+    throw new Error("Nu am putut încărca regulamentul.");
   }
 
   const { error: updateError } = await supabase
@@ -48,7 +49,8 @@ export async function uploadRulesPdf(campaignId: string, file: File) {
     .eq("id", campaignId);
 
   if (updateError) {
-    throw new Error(`Failed to save PDF path: ${updateError.message}`);
+    console.error("uploadRulesPdf (save path) failed:", updateError);
+    throw new Error("Nu am putut salva regulamentul.");
   }
 
   const { data: publicUrl } = service.storage
