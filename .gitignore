@@ -15,9 +15,9 @@ build/
 # production
 dist/
 
-# env
-.env
-.env*.local
+# env — .env* catches .env.production etc. too, not just the .local variants
+.env*
+!.env.example
 
 # debug
 npm-debug.log*

@@ -18,7 +18,7 @@ export type ProgressMilestone = {
   tasks: ProgressTask[];
 };
 
-export const PROGRESS_UPDATED_AT = "2026-08-07";
+export const PROGRESS_UPDATED_AT = "2026-08-09";
 
 export const PROGRESS_MILESTONES: ProgressMilestone[] = [
   {
@@ -88,6 +88,7 @@ export const PROGRESS_MILESTONES: ProgressMilestone[] = [
       { id: "T6.2", title: "Pagini GDPR/legale + script de ștergere participant", state: "done" },
       { id: "T6.3", title: "UAT — testare completă cu un brand real (checklist pregătit, rulare manuală în așteptare)", state: "in_progress" },
       { id: "T6.4", title: "Pagină de landing de marketing reală", state: "done" },
+      { id: "T6.5", title: "Audit de securitate suplimentar (injecție CSV, redirect deschis, expunere campanii ciornă) — remedieri critice de auto-înrolare și rate-limit încă în așteptare", state: "in_progress" },
     ],
   },
 ];

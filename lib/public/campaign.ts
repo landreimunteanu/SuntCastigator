@@ -63,7 +63,12 @@ export async function getPublicCampaign(
     .eq("slug", slug)
     .maybeSingle<CampaignRow>();
 
-  if (error || !data) return null;
+  // Drafts are pre-launch and unannounced — a brand's own name, hero image,
+  // "how to enter" copy and regulament PDF must not be reachable by anyone
+  // who guesses/scrapes the slug before the brand is ready. 404 identically
+  // to a nonexistent slug rather than a distinct "not live yet" state, so
+  // guessing a slug can't even confirm a draft campaign exists.
+  if (error || !data || data.status === "draft") return null;
 
   let rulesPdfUrl: string | null = null;
   if (data.rules_pdf_path) {

@@ -27,6 +27,16 @@ export async function launchCampaign(
 
   if (fetchError || !campaign) throw new Error("Campaign not found");
   if (campaign.brand_id !== brand.brand.id) throw new Error("Unauthorized");
+  // Only a draft can be launched — without this, re-submitting the launch
+  // action against an already-active or ended campaign would silently
+  // re-set status='active', reopening submit_entry() for a campaign whose
+  // draw may have already run and been recorded as final.
+  if (campaign.status !== "draft") {
+    return {
+      ok: false,
+      errors: ["Această campanie a fost deja lansată sau s-a încheiat."],
+    };
+  }
 
   const errors: string[] = [];
 

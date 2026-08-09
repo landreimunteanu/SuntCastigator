@@ -10,7 +10,8 @@
     "gdpr:erase": "node scripts/delete-participant.mjs",
     "test:roles": "node --test lib/auth/roles.test.mjs",
     "test:code-format": "node --test lib/code-format.test.mjs",
-    "test:draw-engine": "node --test lib/draw/engine.test.mjs"
+    "test:draw-engine": "node --test lib/draw/engine.test.mjs",
+    "test:csv": "node --test lib/csv/serialize.test.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",

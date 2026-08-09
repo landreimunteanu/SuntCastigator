@@ -10,14 +10,14 @@ export async function GET() {
     // without depending on any tables (schema lands in T0.4).
     const { error } = await supabase.auth.getSession();
     if (error) {
-      return NextResponse.json(
-        { ok: false, error: error.message },
-        { status: 503 },
-      );
+      // Unauthenticated, public endpoint — never echo the underlying
+      // Supabase/GoTrue error text back to the caller.
+      console.error("/api/health failed", error);
+      return NextResponse.json({ ok: false }, { status: 503 });
     }
     return NextResponse.json({ ok: true });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "unknown";
-    return NextResponse.json({ ok: false, error: message }, { status: 503 });
+    console.error("/api/health failed", err);
+    return NextResponse.json({ ok: false }, { status: 503 });
   }
 }

@@ -1,5 +1,15 @@
 import { z } from "zod";
 
+// z.string().url() accepts any scheme, including javascript:/data:/vbscript:.
+// hero_image_url is rendered as an <Image src> on the public consumer page,
+// so it must be restricted to http(s) — one refactor (a link, a CSS
+// background) away from turning an unrestricted scheme into stored XSS,
+// and an arbitrary host still leaks every visitor's IP/UA on page load.
+const httpUrlSchema = z.string().url().refine(
+  (v) => v.startsWith("https://") || v.startsWith("http://"),
+  { message: "URL-ul trebuie să înceapă cu http:// sau https://" }
+);
+
 export const campaignNameSchema = z.object({
   name: z
     .string()
@@ -29,8 +39,10 @@ export const campaignDraftUpdateSchema = z.object({
   limit_per_contact_24h: z.number().int().min(0).optional(),
   starts_at: z.string().date().optional(),
   ends_at: z.string().date().optional(),
-  hero_image_url: z.string().url().optional().or(z.literal("")),
-  how_to_text: z.string().optional(),
+  hero_image_url: httpUrlSchema.optional().or(z.literal("")),
+  how_to_text: z.string().max(2000, {
+    message: "Textul \"cum participi\" nu poate depăși 2000 de caractere",
+  }).optional(),
   rules_pdf_path: z.string().optional(),
 });
 
