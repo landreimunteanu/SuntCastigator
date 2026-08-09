@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CopyLinkButton } from "@/components/CopyLinkButton";
 
 type CampaignStatus = "draft" | "active" | "ended";
 
@@ -78,6 +79,7 @@ export function CampaignCard({ campaign }: { campaign: CampaignListItem }) {
             >
               Vezi pagina publică
             </Link>
+            <CopyLinkButton path={`/c/${campaign.slug}`} />
           </div>
         )}
         {campaign.status === "ended" && (

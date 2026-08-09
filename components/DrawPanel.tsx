@@ -58,9 +58,14 @@ export function DrawPanel({ campaignId, tier, eligibleCount, existingDraw }: Pro
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  // A draw is one-shot — uq_draws_campaign_tier blocks re-running it — and
+  // picks real winners, so a bare button with no confirmation is one
+  // misclick away from a support call. Requires a second, explicit click.
+  const [confirming, setConfirming] = useState(false);
 
   function runDraw() {
     setError(null);
+    setConfirming(false);
     startTransition(async () => {
       try {
         const res = await fetch(`/api/campaigns/${campaignId}/draw`, {
@@ -120,15 +125,41 @@ export function DrawPanel({ campaignId, tier, eligibleCount, existingDraw }: Pro
               {eligibleCount} participanți eligibili
             </p>
           </div>
-          <button
-            type="button"
-            onClick={runDraw}
-            disabled={pending || eligibleCount === 0}
-            className="inline-flex shrink-0 items-center justify-center rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {pending ? "Se extrage..." : "🎲 Rulează extragerea"}
-          </button>
+          {confirming ? (
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setConfirming(false)}
+                disabled={pending}
+                className="inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-800 shadow-sm transition-colors hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                Anulează
+              </button>
+              <button
+                type="button"
+                onClick={runDraw}
+                disabled={pending}
+                className="inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {pending ? "Se extrage..." : "Da, extrage — ireversibil"}
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setConfirming(true)}
+              disabled={pending || eligibleCount === 0}
+              className="inline-flex shrink-0 items-center justify-center rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              🎲 Rulează extragerea
+            </button>
+          )}
         </div>
+        {confirming && (
+          <p className="mt-2 text-sm text-amber-700">
+            Extragerea este definitivă și nu poate fi refăcută pentru această categorie de premii.
+          </p>
+        )}
         {eligibleCount === 0 && (
           <p className="mt-2 text-sm text-amber-700">
             Nu există participanți eligibili pentru extragere.

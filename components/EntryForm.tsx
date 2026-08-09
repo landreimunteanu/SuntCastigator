@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition, type FormEvent } from "react";
+import { useMemo, useRef, useState, useTransition, type FormEvent } from "react";
 import { entrySubmissionSchema } from "@/lib/validations/entry";
 
 type Props = {
@@ -13,12 +13,14 @@ type Props = {
 type ApiOk = { status: "valid" | "duplicate" | "invalid" };
 type ApiErr = { error: string; reason?: string };
 
+type RateLimitReason = "ip" | "contact";
+
 type UiState =
   | { kind: "idle" }
   | { kind: "success" }
   | { kind: "duplicate" }
   | { kind: "invalid_format" }
-  | { kind: "rate_limited" }
+  | { kind: "rate_limited"; reason: RateLimitReason }
   | { kind: "ended" }
   | { kind: "not_active" }
   | { kind: "error" };
@@ -36,6 +38,14 @@ export default function EntryForm({
   const [fieldError, setFieldError] = useState<string | null>(null);
   const [state, setState] = useState<UiState>({ kind: "idle" });
   const [pending, startTransition] = useTransition();
+  const codeInputRef = useRef<HTMLInputElement>(null);
+
+  // Duplicate/invalid mean the typed code itself is the problem — put the
+  // cursor back on it with the value selected so the next keystroke replaces
+  // it, instead of leaving the participant to click in and clear it by hand.
+  function refocusCode() {
+    requestAnimationFrame(() => codeInputRef.current?.select());
+  }
 
   // Compile the regex once per session; if the stored value is malformed we
   // simply skip client-side format checking — the server is authoritative.
@@ -70,6 +80,7 @@ export default function EntryForm({
 
     if (compiledRegex && !compiledRegex.test(normalizedCode)) {
       setFieldError("Codul nu are formatul corect");
+      refocusCode();
       return;
     }
 
@@ -87,10 +98,15 @@ export default function EntryForm({
         }
         if (res.status === 409) {
           setState({ kind: "duplicate" });
+          refocusCode();
           return;
         }
         if (res.status === 429) {
-          setState({ kind: "rate_limited" });
+          const payload = (await res.json().catch(() => ({}))) as ApiErr;
+          setState({
+            kind: "rate_limited",
+            reason: payload.reason === "contact" ? "contact" : "ip",
+          });
           return;
         }
 
@@ -100,6 +116,7 @@ export default function EntryForm({
 
         if ("status" in payload && payload.status === "invalid") {
           setState({ kind: "invalid_format" });
+          refocusCode();
           return;
         }
         if ("error" in payload) {
@@ -156,6 +173,7 @@ export default function EntryForm({
           Cod promoțional
         </label>
         <input
+          ref={codeInputRef}
           id="code"
           name="code"
           type="text"
@@ -257,11 +275,32 @@ export default function EntryForm({
   );
 }
 
+// The IP limit resets on a 1-hour rolling window and the per-contact limit
+// on 24 hours (see submit_entry() in supabase/migrations/0001_init.sql) —
+// telling the participant which one applies avoids a vague "try later"
+// that gives no sense of whether that means five minutes or a day.
+const RATE_LIMIT_BODY: Record<RateLimitReason, string> = {
+  ip: "Ai trimis prea multe coduri de pe acest dispozitiv. Revino peste o oră.",
+  contact: "Ai atins limita de înscrieri pentru acest contact. Revino mâine.",
+};
+
 function renderBanner(state: UiState) {
   if (state.kind === "idle" || state.kind === "success") return null;
 
+  if (state.kind === "rate_limited") {
+    return (
+      <div
+        role="alert"
+        className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"
+      >
+        <p className="font-semibold">Prea multe încercări</p>
+        <p className="mt-0.5">{RATE_LIMIT_BODY[state.reason]}</p>
+      </div>
+    );
+  }
+
   const map: Record<
-    Exclude<UiState["kind"], "idle" | "success">,
+    Exclude<UiState["kind"], "idle" | "success" | "rate_limited">,
     { title: string; body: string; tone: "warn" | "error" }
   > = {
     duplicate: {
@@ -272,11 +311,6 @@ function renderBanner(state: UiState) {
     invalid_format: {
       title: "Codul nu are formatul corect",
       body: "Verifică pe ambalaj și încearcă din nou.",
-      tone: "warn",
-    },
-    rate_limited: {
-      title: "Prea multe încercări",
-      body: "Ai trimis prea multe coduri într-un timp scurt. Revino mai târziu.",
       tone: "warn",
     },
     ended: {

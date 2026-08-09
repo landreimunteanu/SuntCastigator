@@ -6,6 +6,8 @@ import { getCampaignForBrand } from "@/lib/queries/campaign-detail";
 import { getEntriesByDay } from "@/lib/queries/entries-by-day";
 import { StatCard } from "@/components/StatCard";
 import { EntriesChart } from "@/components/EntriesChart";
+import { CopyLinkButton } from "@/components/CopyLinkButton";
+import { AutoRefresh } from "@/components/AutoRefresh";
 
 export const dynamic = "force-dynamic";
 
@@ -69,6 +71,7 @@ export default async function CampaignOverviewPage({
 
   return (
     <div>
+      {campaign.status === "active" && <AutoRefresh />}
       <div className="flex items-center gap-2 text-sm text-neutral-500">
         <Link
           href="/dashboard/campaigns"
@@ -93,13 +96,16 @@ export default async function CampaignOverviewPage({
         </div>
         <div className="flex items-center gap-2">
           {campaign.status === "active" && (
-            <Link
-              href={`/c/${campaign.slug}`}
-              target="_blank"
-              className="inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-800 shadow-sm transition-colors hover:bg-neutral-50"
-            >
-              Vezi pagina publică
-            </Link>
+            <>
+              <Link
+                href={`/c/${campaign.slug}`}
+                target="_blank"
+                className="inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm font-medium text-neutral-800 shadow-sm transition-colors hover:bg-neutral-50"
+              >
+                Vezi pagina publică
+              </Link>
+              <CopyLinkButton path={`/c/${campaign.slug}`} />
+            </>
           )}
           <a
             href={`/api/campaigns/${campaign.id}/export`}

@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getCurrentBrand } from "@/lib/supabase/get-brand";
 import { getCampaignForBrand } from "@/lib/queries/campaign-detail";
 import { EntriesTable, type EntryRow, type EntryStatus } from "@/components/EntriesTable";
+import { AutoRefresh } from "@/components/AutoRefresh";
 
 export const dynamic = "force-dynamic";
 
@@ -61,6 +62,7 @@ export default async function CampaignEntriesPage({
 
   return (
     <div>
+      {campaign.status === "active" && <AutoRefresh />}
       <div className="flex items-center gap-2 text-sm text-neutral-500">
         <Link
           href={`/dashboard/campaigns/${campaign.id}`}

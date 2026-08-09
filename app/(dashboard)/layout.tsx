@@ -6,12 +6,12 @@ import { signOut } from "@/lib/actions/auth";
 
 export const dynamic = "force-dynamic";
 
+// Înscrieri/Extragere/Rapoarte/Setări are per-campaign concepts (see
+// /dashboard/campaigns/[id]/entries and /[id]/draw) — there is no top-level
+// route for them, and there was never meant to be one. Only list routes
+// that actually resolve; the old entries here 404'd on every click.
 const NAV_ITEMS = [
   { href: "/dashboard/campaigns", label: "Campanii" },
-  { href: "/dashboard/entries",   label: "Înscrieri" },
-  { href: "/dashboard/draw",      label: "Extragere" },
-  { href: "/dashboard/reports",   label: "Rapoarte" },
-  { href: "/dashboard/settings",  label: "Setări" },
   { href: "/dashboard/platform",  label: "Progress Platformă" },
 ];
 

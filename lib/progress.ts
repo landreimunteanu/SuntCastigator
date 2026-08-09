@@ -89,6 +89,7 @@ export const PROGRESS_MILESTONES: ProgressMilestone[] = [
       { id: "T6.3", title: "UAT — testare completă cu un brand real (checklist pregătit, rulare manuală în așteptare)", state: "in_progress" },
       { id: "T6.4", title: "Pagină de landing de marketing reală", state: "done" },
       { id: "T6.5", title: "Audit de securitate suplimentar (injecție CSV, redirect deschis, expunere campanii ciornă, auto-înrolare eliminată, rate-limit fail-open remediat și verificat live)", state: "done" },
+      { id: "T6.6", title: "Polish de usability (linkuri moarte în sidebar eliminate, confirmare extragere, copiere link public, mesaj rate-limit cu timp estimat, auto-refresh dashboard campanie activă)", state: "done" },
     ],
   },
 ];
