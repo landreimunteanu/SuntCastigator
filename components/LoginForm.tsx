@@ -22,16 +22,21 @@ export default function LoginForm() {
 
     startTransition(async () => {
       const supabase = createClient();
+      // shouldCreateUser: false — accounts are provisioned exclusively via
+      // scripts/seed-brand.mjs (see CLAUDE.md: no self-signup). Without this,
+      // any email typed here would silently create a new auth user and, on
+      // first dashboard visit, appear to be a legitimate login attempt.
       const { error: authError } = await supabase.auth.signInWithOtp({
         email: parsed.data.email,
         options: {
+          shouldCreateUser: false,
           emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
-      if (authError) {
-        setError("Nu am putut trimite linkul. Încearcă din nou.");
-        return;
-      }
+      // Always show the same "check your email" state, whether or not the
+      // address is actually enrolled. Surfacing "no account" vs "sent" here
+      // would let anyone probe which emails are invited brand managers.
+      void authError;
       setSent(true);
     });
   }
